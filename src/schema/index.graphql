@@ -1,0 +1,27 @@
+type Query {
+	getTemplate(framework: String, template: String) : [FileData],
+}
+
+type Mutation {
+	saveFiles(data: SaveFilesDataInput) : Boolean
+}
+
+type FileData {
+	path: String!,
+	name: String!,
+	type: String!,
+	icon: String,
+	content: String,
+	files: [FileData],
+}
+
+input SaveFilesDataInput {
+	fiddle: String,
+	files: [SaveFilesInput],
+}
+
+type SaveFilesInput {
+	path: String!,
+	filename: String!,
+	content: String!,
+}
