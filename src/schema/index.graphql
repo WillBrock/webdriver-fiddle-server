@@ -1,18 +1,22 @@
 type Query {
-	getTemplate(framework: String, template: String) : [FileData],
+	getTemplate(framework: String, template: String) : FiddleData,
 }
 
 type Mutation {
 	saveFiles(data: SaveFilesDataInput) : Boolean
 }
 
-type FileData {
-	path: String!,
-	name: String!,
-	type: String!,
-	icon: String,
+type FiddleData {
+	tree: String,
+	flat: FlatData,
+}
+
+type FlatData {
+	path: String,
+	name: String,
 	content: String,
-	files: [FileData],
+	type: String,
+	icon: String,
 }
 
 input SaveFilesDataInput {
@@ -20,7 +24,7 @@ input SaveFilesDataInput {
 	files: [SaveFilesInput],
 }
 
-type SaveFilesInput {
+input SaveFilesInput {
 	path: String!,
 	filename: String!,
 	content: String!,

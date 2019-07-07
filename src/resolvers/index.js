@@ -1,4 +1,3 @@
-
 const resolvers = {
 	Query : {
 		getTemplate : async (obj, { framework = `WebdriverIO`, template = `mocha` }, ctx) => {
@@ -6,46 +5,65 @@ const resolvers = {
 				{
 					name  : `tests`,
 					type  : `folder`,
-					path  : `./`,
+					path  : `./tests`,
 					files : [
+						{
+							name  : `foo`,
+							type  : `folder`,
+							path  : `./tests/foo`,
+							files : [
+								{
+									path    : `./tests/foo/bar-1.js`,
+									name    : `bar-1.js`,
+									content : `hello there`,
+									type    : `file`,
+									icon    : `js square`,
+								},
+							]
+						},
 						{
 							path    : `./tests/test-1.js`,
 							name    : `test-1.js`,
 							content : `fooooooo`,
 							type    : `file`,
-							icon    : `js`,
+							icon    : `js square`,
 						},
 						{
 							path    : `./tests/test-2.js`,
 							name    : `test-2.js`,
 							content : `barrrrrr`,
 							type    : `file`,
-							icon    : `js`,
+							icon    : `js square`,
 						},
 						{
 							path    : `./tests/Register.page.js`,
 							name    : `Register.page.js`,
 							content : `bazzzzzzzzz`,
 							type    : `file`,
-							icon    : `js`,
+							icon    : `js square`,
 						},
 					],
 				},
 				{
-					path    : `./`,
+					path    : `./package.json`,
 					name    : `package.json`,
 					content : ``,
 					type    : `file`,
 					icon    : `node`,
 				},
 				{
-					path  : `./`,
+					path  : `./wdio.conf.js`,
 					name    : `wdio.conf.js`,
 					content : ``,
 					type    : `file`,
-					icon    : `js`,
+					icon    : `js square`,
 				}
 			];
+
+			return {
+				tree : JSON.stringify(all_files),
+				flat : {},
+			};
 		},
 	},
 

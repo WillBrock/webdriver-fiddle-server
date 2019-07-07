@@ -1,4 +1,14 @@
 {
+  "name": "webdriver-fiddle",
+  "version": "0.0.1",
+  "description": "Webdriver Fiddle",
+  "main": "index.js",
+  "author": "Will Brock",
+  "license": "MIT",
+  "scripts": {
+    "dev": "graphpack",
+    "build": "graphpack build"
+  },
   "devDependencies": {
     "eslint": "^6.0.1",
     "eslint-config-standard": "^12.0.0",
