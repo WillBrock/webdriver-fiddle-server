@@ -1,5 +1,6 @@
 type Query {
-	getTemplate(framework: String, template: String) : FiddleData,
+	getTemplate(framework: String, template: String) : [FlatData],
+	getRepo(id: String) : FiddleData,
 }
 
 type Mutation {
@@ -7,8 +8,8 @@ type Mutation {
 }
 
 type FiddleData {
+	fiddle: String,
 	tree: String,
-	flat: FlatData,
 }
 
 type FlatData {
@@ -16,6 +17,9 @@ type FlatData {
 	name: String,
 	content: String,
 	type: String,
+	extension: String,
+	active: Boolean,
+	open: Boolean,
 	icon: String,
 }
 
