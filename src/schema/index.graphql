@@ -1,35 +1,40 @@
 type Query {
-	getTemplate(framework: String, template: String) : [FlatData],
-	getRepo(id: String) : FiddleData,
+	getRepo(repo: String, framework: String, template: String) : [FlatData],
 }
 
 type Mutation {
-	saveFiles(data: SaveFilesDataInput) : Boolean
+	saveFiles(repo: String, files: [SaveFilesInput]) : SavedRepo,
 }
 
-type FiddleData {
-	fiddle: String,
-	tree: String,
+type SavedRepo {
+	repo: String,
+	files: [FlatData],
 }
 
 type FlatData {
+	original_path: String,
+	original_name: String,
 	path: String,
 	name: String,
 	content: String,
 	type: String,
 	extension: String,
+	icon: String,
 	active: Boolean,
 	open: Boolean,
-	icon: String,
-}
-
-input SaveFilesDataInput {
-	fiddle: String,
-	files: [SaveFilesInput],
 }
 
 input SaveFilesInput {
+	original_name: String,
+	original_path: String,
 	path: String!,
-	filename: String!,
+	name: String!,
 	content: String!,
+	type: String!,
+	extension: String,
+	icon: String,
+	active: Boolean,
+	updated: Boolean,
+	deleated: Boolean,
+	open: Boolean,
 }
