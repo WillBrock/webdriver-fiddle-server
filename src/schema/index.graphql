@@ -1,5 +1,6 @@
 type Query {
 	getRepo(repo: String, framework: String, template: String) : [FlatData],
+	runTests(repo: String, cli_args: [String]) : Boolean,
 }
 
 type Mutation {
@@ -22,6 +23,7 @@ type FlatData {
 	icon: String,
 	active: Boolean,
 	open: Boolean,
+	updated: Boolean,
 }
 
 input SaveFilesInput {
@@ -29,7 +31,7 @@ input SaveFilesInput {
 	original_path: String,
 	path: String!,
 	name: String!,
-	content: String!,
+	content: String,
 	type: String!,
 	extension: String,
 	icon: String,

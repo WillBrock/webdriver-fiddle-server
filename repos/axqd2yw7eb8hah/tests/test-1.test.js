@@ -1,17 +1,17 @@
-import Home from './classes/Home.page';
-
-// axqd2yw7eb8hah
+//import Home from '../classes/Home.page';
 
 describe(`Homepage`, () => {
 	before(() => {
-		Home.open();
+		//Home.open();
 	});
 
 	it(`should check page title`, () => {
-		expect(Home.pageTitle.getText()).to.equal(`WebdriverIO`);
+		browser.url(`https://google.com`);
+		browser.pause(2000);
+		//expect(Home.pageTitle.getText()).to.equal(`WebdriverIO`);
 	});
 
 	it(`should check project title`, () => {
-		expect(Home.projectTitle.getText()).to.equal(`Webdriver I/O`);
+		//expect(Home.projectTitle.getText()).to.equal(`Webdriver I/O`);
 	});
 });

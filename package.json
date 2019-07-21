@@ -18,6 +18,9 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "graphpack": "^1.0.9",
-    "make-dir": "^3.0.0"
+    "make-dir": "^3.0.0",
+    "node-pty": "^0.8.1",
+    "ws": "^7.1.1",
+    "xterm": "^3.14.5"
   }
 }

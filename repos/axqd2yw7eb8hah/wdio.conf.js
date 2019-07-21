@@ -1,9 +1,11 @@
 exports.config = {
 	//
-	// ====================
+	// ================adfsfsd====
 	// Runner Configuration
-	// ====================fooobar
-	//
+	// ====================aaaa
+
+	// Foobar bazaaqqqqaaaa
+	//df
 	// WebdriverIO allows it to run your tests in arbitrary locations (e.g. locally or
 	// on a remote machine).
 	runner: 'local',
@@ -20,7 +22,7 @@ exports.config = {
 	// directory is where your package.json resides, so `wdio` will be called from there.
 	//
 	specs: [
-		'./tests'
+		'./tests/*.js'
 	],
 	// Patterns to exclude.
 	exclude: [

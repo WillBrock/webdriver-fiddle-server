@@ -3,6 +3,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 import directoryTree from 'directory-tree';
 import mkdir         from 'make-dir';
+import runTests      from './runTests';
 
 const readFile   = promisify(fs.readFile);
 const writeFile  = promisify(fs.writeFile);
@@ -10,15 +11,17 @@ const rmdir      = promisify(fs.rmdir);
 const renameFile = promisify(fs.rename);
 const unlink     = promisify(fs.unlink);
 
+const STATE_FILE    = `.file-state.json`;
 const REPO_HOME     = path.resolve(__dirname, `../../repos`);
 const TEMPLATE_HOME = path.resolve(__dirname, `../../templates`);
 
 const resolvers = {
 	Query : {
+		runTests,
 		getRepo : async (obj, { repo, framework = `WebdriverIO`, template = `mocha` }, ctx) => {
 			const repo_find = repo ? `${REPO_HOME}/${repo}` : `${TEMPLATE_HOME}/${framework}/${template}`;
 			let repo_path   = path.resolve(__dirname, repo_find);
-			const flat      = await getCode(repo_path, !!repo);
+			const flat      = await getCode(repo_path, !repo);
 
 			return flat;
 		},
@@ -30,15 +33,15 @@ const resolvers = {
 			if(!repo) {
 				repo = Date.now().toString();
 
-				await mkidr(`${REPO_HOME}/${repo}`);
+				await mkdir(`${REPO_HOME}/${repo}`);
 			}
 
 			const repo_directory = `${REPO_HOME}/${repo}`;
+			const state_path     = `${repo_directory}/${STATE_FILE}`;
 
 			// Store the state of the files in the db, could maybe be just a json string
 			// This would have the previous open and active at the last save state
-			console.log(repo);
-			console.log(files);
+			// Or this could be saved as a hidden file in the repo?
 
 			// Sort by directories first
 			files.sort((a, b) => a.type > b.type ? 1 : ((b.type > a.type) ? -1 : 0));
@@ -75,6 +78,16 @@ const resolvers = {
 				}
 			}
 
+			const state = files.filter(file => file.open).map(({ path, open, active }) => {
+				return {
+					path,
+					open,
+					active,
+				};
+			});
+
+			await writeFile(state_path, JSON.stringify(state), `utf-8`);
+
 			const flat = await getCode(repo_directory);
 
 			return {
@@ -88,10 +101,11 @@ const resolvers = {
 export default resolvers;
 
 async function getCode(directory_path, template = false) {
-	const default_active_file = `test-1.test.js`;
-	const all                 = await directoryTree(directory_path, { exclude : /node_modules/ });
-	const regex               = new RegExp(`${directory_path}/`);
-	let tmp_flat              = flattenTree(all.children);
+	const all    = await directoryTree(directory_path, { exclude : /node_modules|.file-state.json/ });
+	const regex  = new RegExp(`${directory_path}/`);
+	const tmp    = await readFile(`${directory_path}/${STATE_FILE}`);
+	const state  = JSON.parse(tmp);
+	let tmp_flat = flattenTree(all.children);
 
 	const file_promises = [];
 	for(const item of tmp_flat) {
@@ -120,15 +134,15 @@ async function getCode(directory_path, template = false) {
 			resolved_index++;
 		}
 
-		if(item.name === default_active_file) {
-			item.active = true;
-			item.open   = true;
-		}
-
 		item.icon = getIcon(icon_extension);
 
 		if(template) {
 			item.updated = true;
+		}
+
+		const state_data = state.find((state_item) => state_item.path === item.path);
+		if(state_data) {
+			item = {...item, ...state_data};
 		}
 
 		return item;
