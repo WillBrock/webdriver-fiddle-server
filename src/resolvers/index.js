@@ -1,9 +1,8 @@
-import path from 'path';
-import fs from 'fs';
+import path          from 'path';
+import fs            from 'fs';
 import { promisify } from 'util';
 import directoryTree from 'directory-tree';
 import mkdir         from 'make-dir';
-import runTests      from './runTests';
 
 const readFile   = promisify(fs.readFile);
 const writeFile  = promisify(fs.writeFile);
@@ -17,7 +16,6 @@ const TEMPLATE_HOME = path.resolve(__dirname, `../../templates`);
 
 const resolvers = {
 	Query : {
-		runTests,
 		getRepo : async (obj, { repo, framework = `WebdriverIO`, template = `mocha` }, ctx) => {
 			const repo_find = repo ? `${REPO_HOME}/${repo}` : `${TEMPLATE_HOME}/${framework}/${template}`;
 			let repo_path   = path.resolve(__dirname, repo_find);
@@ -38,10 +36,6 @@ const resolvers = {
 
 			const repo_directory = `${REPO_HOME}/${repo}`;
 			const state_path     = `${repo_directory}/${STATE_FILE}`;
-
-			// Store the state of the files in the db, could maybe be just a json string
-			// This would have the previous open and active at the last save state
-			// Or this could be saved as a hidden file in the repo?
 
 			// Sort by directories first
 			files.sort((a, b) => a.type > b.type ? 1 : ((b.type > a.type) ? -1 : 0));
@@ -70,7 +64,7 @@ const resolvers = {
 					await renameFile(original_path, current_path);
 				}
 
-				if(new_file && is_directory) {
+				if(is_directory) {
 					await mkdir(current_path);
 				}
 				else if(new_file || file.updated) {
