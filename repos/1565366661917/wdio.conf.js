@@ -1,11 +1,9 @@
 exports.config = {
 	//
-	// ================adfsfsd====
+	// ====================
 	// Runner Configuration
-	// ====================aaaa
-
-	// Foobar bazaaqqqqaaaa
-	//df
+	// ====================
+	//
 	// WebdriverIO allows it to run your tests in arbitrary locations (e.g. locally or
 	// on a remote machine).
 	runner: 'local',

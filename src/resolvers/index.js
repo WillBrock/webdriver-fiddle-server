@@ -16,7 +16,7 @@ const TEMPLATE_HOME = path.resolve(__dirname, `../../templates`);
 
 const resolvers = {
 	Query : {
-		getRepo : async (obj, { repo, framework = `WebdriverIO`, template = `mocha` }, ctx) => {
+		getRepo : async (obj, { repo, framework = `webdriverio`, template = `mocha` }, ctx) => {
 			const repo_find = repo ? `${REPO_HOME}/${repo}` : `${TEMPLATE_HOME}/${framework}/${template}`;
 			let repo_path   = path.resolve(__dirname, repo_find);
 			const flat      = await getCode(repo_path, !repo);
@@ -32,6 +32,8 @@ const resolvers = {
 				repo = Date.now().toString();
 
 				await mkdir(`${REPO_HOME}/${repo}`);
+
+				// Save the creator of the repo to the db
 			}
 
 			const repo_directory = `${REPO_HOME}/${repo}`;
