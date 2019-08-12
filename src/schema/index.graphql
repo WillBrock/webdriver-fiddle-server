@@ -1,10 +1,12 @@
 type Query {
 	getRepo(repo: String, framework: String, template: String) : [FlatData],
-	runTests(repo: String, cli_args: [String]) : Boolean,
+	getHistory(user: Int) : String,
+	searchPackages(search: String) : [SearchPackages],
 }
 
 type Mutation {
 	saveFiles(repo: String, files: [SaveFilesInput]) : SavedRepo,
+	importRepo(repo_url: String) : String,
 }
 
 type SavedRepo {
@@ -39,4 +41,10 @@ input SaveFilesInput {
 	updated: Boolean,
 	deleated: Boolean,
 	open: Boolean,
+}
+
+type SearchPackages {
+	id: String,
+	title: String,
+	version: String,
 }

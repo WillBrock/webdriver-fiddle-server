@@ -16,20 +16,41 @@ const TEMPLATE_HOME = path.resolve(__dirname, `../../templates`);
 
 const resolvers = {
 	Query : {
-		getRepo : async (obj, { repo, framework = `webdriverio`, template = `mocha` }, ctx) => {
+		getRepo : async (obj, { repo = null, framework = `webdriverio`, template = `mocha` }, ctx) => {
+			console.log(repo);
 			const repo_find = repo ? `${REPO_HOME}/${repo}` : `${TEMPLATE_HOME}/${framework}/${template}`;
-			let repo_path   = path.resolve(__dirname, repo_find);
+			const repo_path = path.resolve(__dirname, repo_find);
 			const flat      = await getCode(repo_path, !repo);
 
 			return flat;
 		},
+
+		getHistory : async (obj, { user }, ctx) => {
+
+		},
+
+		searchPackages : async (obj, { search }, ctx) => {
+			console.log(search, `search`)
+			return [
+				{
+					id: `foo`,
+					title: `bar`,
+					version: `1.0.0`
+				},
+				{
+					id: `blay`,
+					title: `blah`,
+					version: `5.0.0`
+				}
+			];
+		}
 	},
 
 	Mutation : {
 		saveFiles : async (obj, { repo, files }, ctx) => {
 			// If the repo doesn't exist yet, create it
 			if(!repo) {
-				repo = Date.now().toString();
+				repo = createUrl();
 
 				await mkdir(`${REPO_HOME}/${repo}`);
 
@@ -91,6 +112,20 @@ const resolvers = {
 				files : flat,
 			};
 		},
+
+		importRepo : async (obj, { repo_url }, ctx) => {
+			const repo_path = createUrl();
+
+			// Do a git clone here for the repo
+			/*
+			await exec(`
+				cd ${REPO_HOME}
+				git clone ${repo_url} ${repo_path}
+			`);
+			*/
+
+			return repo_path;
+		}
 	},
 };
 
@@ -177,4 +212,8 @@ function getIcon(extension) {
 	}
 
 	return extension_map[extension];
+}
+
+function createUrl() {
+	return Date.now().toString();
 }
