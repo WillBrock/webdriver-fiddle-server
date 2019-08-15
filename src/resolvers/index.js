@@ -3,12 +3,14 @@ import fs            from 'fs';
 import { promisify } from 'util';
 import directoryTree from 'directory-tree';
 import mkdir         from 'make-dir';
+import { exec }      from 'child_process';
 
 const readFile   = promisify(fs.readFile);
 const writeFile  = promisify(fs.writeFile);
 const rmdir      = promisify(fs.rmdir);
 const renameFile = promisify(fs.rename);
 const unlink     = promisify(fs.unlink);
+const execp      = promisify(exec);
 
 const STATE_FILE    = `.file-state.json`;
 const REPO_HOME     = path.resolve(__dirname, `../../repos`);
@@ -30,7 +32,32 @@ const resolvers = {
 		},
 
 		searchPackages : async (obj, { search }, ctx) => {
-			console.log(search, `search`)
+			console.log(search, `search`);
+			if(!search) {
+				return [];
+			}
+
+			const query = `npm search ${search} --json`;
+			let tmp     = await execp(query);
+
+			if(tmp.stderr) {
+				throw new Error(tmp.stderr);
+			}
+
+			tmp = JSON.parse(tmp.stdout);
+
+			console.log(tmp);
+
+			const results = tmp.map(pkg => {
+				return {
+					id          : pkg.name,
+					title       : pkg.name,
+					version     : pkg.version,
+					description : pkg.description,
+				};
+			});
+
+			return results;
 			return [
 				{
 					id: `foo`,

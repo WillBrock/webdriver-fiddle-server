@@ -47,4 +47,5 @@ type SearchPackages {
 	id: String,
 	title: String,
 	version: String,
+	description: String,
 }
