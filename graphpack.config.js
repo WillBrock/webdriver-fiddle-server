@@ -4,7 +4,7 @@ const { exec }  = require(`child_process`);
 
 const REPO_HOME = path.resolve(__dirname, `./repos`);
 
-const wss = new WebSocket.Server({ port : 12221 });
+const wss = new WebSocket.Server({ port : 12554 });
 wss.on(`connection`, (ws) => {
 	ws.on(`message`, (request) => {
 		const {
